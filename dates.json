@@ -1,0 +1,54 @@
+{
+  "january" : {
+    "start"  : "01-01",
+    "end"  : "01-31"
+  },
+  "february" : {
+    "start"  : "02-01",
+    "end"  : "02-28"
+  },
+  "februaryLEAP" : {
+    "start"  : "02-01",
+    "end"  : "02-29"
+  },
+  "march" : {
+    "start"  : "03-01",
+    "end"  : "03-31"
+  },
+  "april" : {
+    "start"  : "04-01",
+    "end"  : "04-30"
+  },
+  "may" : {
+    "start"  : "05-01",
+    "end"  : "05-31"
+  },
+  "june" : {
+    "start"  : "06-01",
+    "end"  : "06-30"
+  },
+  "july" : {
+    "start"  : "07-01",
+    "end"  : "07-31"
+  },
+  "august" : {
+    "start"  : "08-01",
+    "end"  : "08-31"
+  },
+  "september" : {
+    "start"  : "09-01",
+    "end"  : "09-30"
+  },
+  "october" : {
+    "start"  : "10-01",
+    "end"  : "10-31"
+  },
+  "november" : {
+    "start"  : "11-01",
+    "end"  : "11-30"
+  },
+  "december" : {
+    "start"  : "12-01",
+    "end"  : "12-31"
+  }
+}
