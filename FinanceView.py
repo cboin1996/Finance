@@ -80,7 +80,7 @@ def main():
     font = {'size' : 6}
     plt.rc('font', **font)
     fig = plt.figure(figsize=(10,9), constrained_layout=False)
-    fig.subplots_adjust(hspace=0.4, wspace=0.4)
+    fig.subplots_adjust(hspace=0.83, wspace=0.4)
     fig.suptitle('Total Lifetime Net Income: ' + str(incomeAmount - expenseTotal))
 
 
