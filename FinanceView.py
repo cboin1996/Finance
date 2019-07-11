@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import datetime
 import os
 import sys
+import settings
 
 
 def fetchData(postDetails, postUrl):
@@ -35,17 +36,27 @@ def getTotalsOfIncome(DataFrame, moneySelection):
 
 def main():
     # will be populated by command line arguments
-    postDetails = {}
-    incomePostDetails = {}
-    postUrl = sys.argv[1]
-    postDetails["fname"] = sys.argv[2]
-    postDetails["lname"] = sys.argv[3]
-    incomePostDetails["fname"] = sys.argv[2]
-    incomePostDetails["lname"] = sys.argv[3]
+    postDetails = {
+        "fname" : "",
+        "lname" : "",
+        "requestjson" : "Submit"
+    }
+    incomePostDetails = {
+        "fname" : "",
+        "lname" : "",
+        "requestIncomeJson" : "Submit"
+    }
+    userDetails = settings.load_user_settings()
+    postUrl = userDetails['url']
+    postDetails["fname"] = userDetails['userName']
+    postDetails["lname"] = userDetails['pword']
+    incomePostDetails["fname"] = userDetails['userName']
+    incomePostDetails["lname"] = userDetails['pword']
 
     # read in the json file
     pathToDirectory= os.path.dirname(os.path.realpath(__file__))
     datesPath = pathToDirectory + "/dates.json"
+
     with open(datesPath) as jsonfile:
         dates = json.load(jsonfile)
 
