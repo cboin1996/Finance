@@ -35,16 +35,8 @@ def getTotalsOfIncome(DataFrame, moneySelection):
 
 def main():
     # will be populated by command line arguments
-    postDetails = {
-        "fname" : "",
-        "lname" : "",
-        "requestjson" : "Submit"
-    }
-    incomePostDetails = {
-        "fname" : "",
-        "lname" : "",
-        "requestIncomeJson" : "Submit"
-    }
+    postDetails = {}
+    incomePostDetails = {}
     postUrl = sys.argv[1]
     postDetails["fname"] = sys.argv[2]
     postDetails["lname"] = sys.argv[3]
