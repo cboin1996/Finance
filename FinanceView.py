@@ -65,6 +65,7 @@ def main():
 
     purchase_Response = fetchData(postDetails=postDetails, postUrl=postUrl)
     data = pd.DataFrame(json.loads(purchase_Response.text))
+    # convert price to float
     data = data.astype({"TransactionPrice": float})
     expenseTotal = getTotalsOfIncome(data, moneySelection="Expense")
 
@@ -80,18 +81,18 @@ def main():
     print(incomeAmount)
 
     # set figure options
-    font = {'size' : 6}
+    font = {'size' : 5}
     plt.rc('font', **font)
-    fig = plt.figure(figsize=(10,9), constrained_layout=False)
-    fig.subplots_adjust(hspace=0.83, wspace=0.4)
+    fig = plt.figure(figsize=(20,9), constrained_layout=False)
+    fig.subplots_adjust(hspace=0.83, wspace=0.15)
     fig.suptitle('Total Lifetime Net Income: ' + str(incomeAmount - expenseTotal))
 
 
     # uncomment to print whole database
     # DataPrinter(data, "PurchaseId")
+    # set the date column as datetime
     data["DateofTransaction"] = pd.to_datetime(data["DateofTransaction"])
     incomeData["IncomeDate"] = pd.to_datetime(incomeData["IncomeDate"])
-    # counter
 
     for i, month in enumerate(dates):
         # must clear the array each loop!
@@ -99,7 +100,7 @@ def main():
         totalsOfPurchases = []
 
         if (month != "februaryLEAP"):
-            print("--------------------" + month + "--------------------")
+            print("----------------------------------------" + month.upper() + "----------------------------------------")
             monthStartDate = currentYear + "-" + dates[month]['start']
             monthEndDate = currentYear + "-" + dates[month]['end']
 
@@ -107,11 +108,11 @@ def main():
             monthEndDateObject = datetime.datetime.strptime(monthEndDate, '%Y-%m-%d')
 
 
-            mask = (data['DateofTransaction'] > monthStartDateObject) & (data['DateofTransaction'] <= monthEndDateObject)
+            mask = (data['DateofTransaction'] >= monthStartDateObject) & (data['DateofTransaction'] <= monthEndDateObject)
             expenseMonthData = data.loc[mask]
             monthlyExpenseTotal = getTotalsOfIncome(expenseMonthData, 'Expense')
 
-            incomeMask = (incomeData['IncomeDate'] > monthStartDateObject) & (incomeData['IncomeDate'] <= monthEndDateObject)
+            incomeMask = (incomeData['IncomeDate'] >= monthStartDateObject) & (incomeData['IncomeDate'] <= monthEndDateObject)
             incomeMonthData = incomeData.loc[incomeMask]
             monthlyIncomeTotal = getTotalsOfIncome(incomeMonthData, 'Income')
 
@@ -119,7 +120,14 @@ def main():
 
             # #detect empty dataframe and dont make graph
             if expenseMonthData.empty == False:
-                # set price data to float type for summing
+                # print by client name each income table
+                incomeMonthData.set_index("ClientName", inplace=True)
+                incomeIndex = incomeMonthData.index
+                incomeIndex = incomeIndex.drop_duplicates(keep='first')
+                for clientName in incomeIndex:
+                    clientSpecificData = incomeMonthData.loc[clientName]
+                    print(clientSpecificData, end="\n\n")
+
                 expenseMonthData.set_index("ExpenseName", inplace=True)
                 index = expenseMonthData.index
                 # get rid of the duplicates.. use as bar graph titles
@@ -128,11 +136,11 @@ def main():
                 # get data for each ExpenseCategory
                 for item in index:
                     itemData = expenseMonthData.loc[item]
-                    print(itemData)
+                    print(itemData, end="\n\n")
                     totalsOfPurchases.append(round(itemData['TransactionPrice'].sum(), 2))
 
                 y_pos = np.arange(len(index))
-
+                # i is the number of iterations from the master for loop
                 ax = fig.add_subplot(6, 2, i)
                 ax.bar(y_pos, totalsOfPurchases, align='center', alpha=0.5)
                 ax.set_xticks(y_pos)
@@ -144,10 +152,9 @@ def main():
                 ax.set_title(graphTitleTop + graphTitleMiddle + graphTitleBottom)
 
                 for i, purchaseTotal in enumerate(totalsOfPurchases):
-
                     ax.text(i, 0.95*purchaseTotal, purchaseTotal, ha='center')
 
-            print("-----------------------------------------------------")
+            print("----------------------------------------" + month.upper() + "----------------------------------------")
     plt.show()
 
 if __name__=="__main__":
